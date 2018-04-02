@@ -5,3 +5,6 @@ __pycache__/
 
 # Secrets
 CREDENTIALS.py
+
+# Database Files
+*.sqlite
