@@ -1,6 +1,7 @@
 import time
 import json
 import requests
+import urllib
 
 from CREDENTIALS import *
 
@@ -30,6 +31,7 @@ def get_last_update_id(updates):
   return max(update_ids)
 
 def send_message(text, chat_id):
+  text = urllib.quote_plus(text)
   url = URL + "sendMessage?text={}&chat_id={}".format(text, chat_id)
   get_url(url)
 
