@@ -55,8 +55,8 @@ def handle_updates(updates):
     elif text in items:
       db.delete_item(text)
       items = db.get_items()
-      keyboard = build_keyboard(items)
-      send_message("Select an item to mark complete", chat, keyboard)
+      message = "\n".join(items)
+      send_message(message, chat)
     else:
       db.add_item(text)
       items = db.get_items()
