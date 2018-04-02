@@ -52,6 +52,10 @@ def handle_updates(updates):
     if text == "/done":
       keyboard = build_keyboard(items)
       send_message("Select an item to mark complete", chat, keyboard)
+    elif text == "/start":
+      send_message("Welcome to the Executive Function Bot. I'm here to help you get things done. For now, I operate as a traditional To Do list. Tell me things that you want to do and use /done to mark them complete", chat)
+    elif text.startswith("/"):
+      continue
     elif text in items:
       db.delete_item(text, chat)
       items = db.get_items(chat)
