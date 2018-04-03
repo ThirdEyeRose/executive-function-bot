@@ -46,11 +46,15 @@ def handle_updates(updates):
     text = update["message"]["text"]
     chat = update["message"]["chat"]["id"]
     items = db.get_items(chat)
-    if text == "/done":
+    if text == "/start":
+      start_message = """Welcome to the Executive Function Bot. I'm here to
+      help you get things done. For now, I operate as a traditional To Do list.
+      Tell me things that you want to do and use /done to mark them complete.
+      """
+      send_message(start_message, chat)
+    elif text == "/done":
       keyboard = todo.build_keyboard(items)
       send_message("Select an item to mark complete", chat, keyboard)
-    elif text == "/start":
-      send_message("Welcome to the Executive Function Bot. I'm here to help you get things done. For now, I operate as a traditional To Do list. Tell me things that you want to do and use /done to mark them complete", chat)
     elif text.startswith("/"):
       continue
     elif text in items:
