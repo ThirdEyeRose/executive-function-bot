@@ -59,16 +59,25 @@ def handle_updates(updates, listener):
       keyboard = todo.build_keyboard(items)
       send_message("Select an item to mark complete", chat, keyboard)
       return "removetodo"
-    elif text == "end":
-      return None
-    elif text.startswith("/"):
-      continue
     elif text in items and listener == "removetodo":
       todo.remove_item_from_list(text, chat)
       send_message(todo.get_item_list(chat), chat)
     elif listener == "addtodo":
       todo.add_item_to_list(text, chat)
       send_message(todo.get_item_list(chat), chat)
+    elif text == "/starttrackingfeelings":
+      send_message("Feeling Tracking Enabled", chat)
+      send_message("How often would you like to talk about your feelings?", chat)
+      return "configfeelingtrackingfrequency"
+    elif listener == "configfeelingtrackingfrequency":
+      send_message("Do you have a preference of when you want to talk about your feelings?", chat)
+      return "configfeelingtrackingtime"
+    elif listener == "configfeelingtrackingtime":
+      send_message("Thanks for letting me know!", chat)
+    elif text == "end":
+      return None
+    elif text.startswith("/"):
+      continue
     else:
       continue
 
