@@ -52,21 +52,22 @@ def handle_updates(updates):
       Tell me things that you want to do and use /done to mark them complete.
       """
       send_message(start_message, chat)
-    elif text == "/done":
+    elif text == "/addtodo":
+      send_message("What do you need to do?", chat)
+      # START TODOADD LISTENER
+    elif text == "/finishtodo":
       keyboard = todo.build_keyboard(items)
       send_message("Select an item to mark complete", chat, keyboard)
+      # START TODOREMOVE LISTENER
     elif text.startswith("/"):
       continue
+    # Remove Items by chat
     elif text in items:
       db.delete_item(text, chat)
-      items = db.get_items(chat)
-      message = "\n".join(items)
-      send_message(message, chat)
+      send_message(todo.get_item_list(chat), chat)
     else:
       db.add_item(text, chat)
-      items = db.get_items(chat)
-      message = "\n".join(items)
-      send_message(message, chat)
+      send_message(todo.get_item_list(chat), chat)
 
 def main():
   db.setup()
