@@ -42,11 +42,16 @@ def send_message(text, chat_id, reply_markup=None):
     url += "&reply_markup={}".format(reply_markup)
   get_url(url)
 
+def build_keyboard(items):
+  keyboard = [[item] for item in items]
+  reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
+  return json.dumps(reply_markup)
+
 def handle_updates(updates, listener):
   for update in updates["result"]:
     text = update["message"]["text"]
     chat = update["message"]["chat"]["id"]
-    items = db.get_items(chat)
+    todoitems = db.get_items(chat)
     if text == "/start":
       start_message = """Welcome to the Executive Function Bot. I'm here to
       help you get things done. For now, I operate as a traditional To Do list.
@@ -57,10 +62,10 @@ def handle_updates(updates, listener):
       send_message("What do you need to do?", chat)
       return "addtodo"
     elif text == "/finishtodo":
-      keyboard = todo.build_keyboard(items)
+      keyboard = build_keyboard(todoitems)
       send_message("Select an item to mark complete", chat, keyboard)
       return "removetodo"
-    elif text in items and listener == "removetodo":
+    elif text in todoitems and listener == "removetodo":
       todo.remove_item_from_list(text, chat)
       send_message(todo.get_item_list(chat), chat)
     elif listener == "addtodo":
