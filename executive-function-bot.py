@@ -1,11 +1,13 @@
 import time
 import json
 import requests
+import schedule
 import urllib
 
 from CREDENTIALS import *
 from dbhelper import DBHelper
 import todo_list as todo
+import feeling_tracker as ft
 
 db = DBHelper()
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
@@ -45,7 +47,6 @@ def handle_updates(updates, listener):
     text = update["message"]["text"]
     chat = update["message"]["chat"]["id"]
     items = db.get_items(chat)
-    print listener
     if text == "/start":
       start_message = """Welcome to the Executive Function Bot. I'm here to
       help you get things done. For now, I operate as a traditional To Do list.
@@ -90,6 +91,7 @@ def main():
     if len(updates["result"]) > 0:
       last_update_id = get_last_update_id(updates) + 1
       listener = handle_updates(updates, listener)
+    schedule.run_pending()
     time.sleep(0.5)
 
 if __name__ == '__main__':
