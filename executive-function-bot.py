@@ -40,12 +40,12 @@ def send_message(text, chat_id, reply_markup=None):
     url += "&reply_markup={}".format(reply_markup)
   get_url(url)
 
-# Break this up and Abstract pieces of it to To Do class
-def handle_updates(updates):
+def handle_updates(updates, listener):
   for update in updates["result"]:
     text = update["message"]["text"]
     chat = update["message"]["chat"]["id"]
     items = db.get_items(chat)
+    print listener
     if text == "/start":
       start_message = """Welcome to the Executive Function Bot. I'm here to
       help you get things done. For now, I operate as a traditional To Do list.
@@ -54,29 +54,33 @@ def handle_updates(updates):
       send_message(start_message, chat)
     elif text == "/addtodo":
       send_message("What do you need to do?", chat)
-      # START TODOADD LISTENER
+      return "addtodo"
     elif text == "/finishtodo":
       keyboard = todo.build_keyboard(items)
       send_message("Select an item to mark complete", chat, keyboard)
-      # START TODOREMOVE LISTENER
+      return "removetodo"
+    elif text == "end":
+      return None
     elif text.startswith("/"):
       continue
-    # Remove Items by chat
-    elif text in items:
-      db.delete_item(text, chat)
+    elif text in items and listener == "removetodo":
+      todo.remove_item_from_list(text, chat)
+      send_message(todo.get_item_list(chat), chat)
+    elif listener == "addtodo":
+      todo.add_item_to_list(text, chat)
       send_message(todo.get_item_list(chat), chat)
     else:
-      db.add_item(text, chat)
-      send_message(todo.get_item_list(chat), chat)
+      continue
 
 def main():
   db.setup()
   last_update_id = None
+  listener = None
   while True:
     updates = get_updates(last_update_id)
     if len(updates["result"]) > 0:
       last_update_id = get_last_update_id(updates) + 1
-      handle_updates(updates)
+      listener = handle_updates(updates, listener)
     time.sleep(0.5)
 
 if __name__ == '__main__':
