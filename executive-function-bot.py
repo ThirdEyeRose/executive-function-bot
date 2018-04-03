@@ -69,11 +69,15 @@ def handle_updates(updates, listener):
     elif text == "/starttrackingfeelings":
       send_message("Feeling Tracking Enabled", chat)
       send_message("How often would you like to talk about your feelings?", chat)
+      # Send keyboard here "Daily", "A few times a day", "Hourly"
       return "configfeelingtrackingfrequency"
     elif listener == "configfeelingtrackingfrequency":
+      # Record frequency response in database
       send_message("Do you have a preference of when you want to talk about your feelings?", chat)
+      # Send keyboard here "Morning", "Afternoon", "Evening", "Throughout the day"
       return "configfeelingtrackingtime"
     elif listener == "configfeelingtrackingtime":
+      # Record time preference in database
       send_message("Thanks for letting me know!", chat)
     elif text == "end":
       return None
