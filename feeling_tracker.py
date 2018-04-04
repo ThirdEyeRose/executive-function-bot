@@ -23,4 +23,15 @@ def command_handler(text, chat_id):
     options = ["Daily", "A few times a day", "Hourly"]
     keyboard = chat_helper.build_keyboard(options)
     chat_helper.send_message("How often would you like to talk about your feelings?", chat_id, keyboard)
-    return "configfeelingtrackingfrequency"
+    return "feelingtrackerconfigfrequency"
+
+def listener_handler(listener, text, chat_id):
+  if listener == "feelingtrackerconfigfrequency":
+    set_frequency(chat_id, text)
+    options = ["Morning", "Afternoon", "Evening", "Throughout the day"]
+    keyboard = chat_helper.build_keyboard(options)
+    chat_helper.send_message("Do you have a preference of when you want to talk about your feelings?", chat_id, keyboard)
+    return "feelingtrackerconfigtime"
+  elif listener == "feelingtrackerconfigtime":
+    set_time_pref(chat_id, text)
+    chat_helper.send_message("Thanks for letting me know!", chat_id)

@@ -30,15 +30,8 @@ def command_handler(text, chat_id):
 def listener_handler(listener, text, chat_id):
   if listener.startswith("todo"):
     chat_helper.send_message(todo.listener_handler(listener, text, chat_id), chat_id)
-  elif listener == "configfeelingtrackingfrequency":
-    ft.set_frequency(chat_id, text)
-    options = ["Morning", "Afternoon", "Evening", "Throughout the day"]
-    keyboard = chat_helper.build_keyboard(options)
-    chat_helper.send_message("Do you have a preference of when you want to talk about your feelings?", chat_id, keyboard)
-    return "configfeelingtrackingtime"
-  elif listener == "configfeelingtrackingtime":
-    ft.set_time_pref(chat_id, text)
-    chat_helper.send_message("Thanks for letting me know!", chat_id)
+  elif listener.startswith("feelingtracker"):
+    return ft.listener_handler(listener, text, chat_id)
   else:
     print listener
 
