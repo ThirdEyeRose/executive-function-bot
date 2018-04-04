@@ -16,6 +16,7 @@ def prompt_user(owner):
   options = ["1", "2", "3", "4","5"]
   keyboard = chat_helper.build_keyboard(options)
   chat_helper.send_message("How are you feeling?", owner, keyboard)
+  # Set listener to record the feeling rating
 
 def initialize_schedule(owner):
   config = db.get_feelings_config(owner)
@@ -47,3 +48,13 @@ def listener_handler(listener, text, chat_id):
     set_time_pref(chat_id, text)
     initialize_schedule(owner)
     chat_helper.send_message("Thanks for letting me know! I'll be in touch!", chat_id)
+  elif listener == "feelingtrackerrating":
+    # Add rating to database with timestamp
+    chat_helper.send_message("Would you like to tell me about it?", chat_id)
+    # Send keyboard options for "yes", "no"?
+    # If yes, continue to record feelings
+    return "feelingtrackerdescription"
+    # If no, say "Not a problem. Have a great day!" and quit
+  elif listener == "feelingtrackerdescription":
+    # Add description to database with timestamp
+    chat_helper.send_message("Thanks for talking to me about it. Is there anything else you want to say?", chat_id)
