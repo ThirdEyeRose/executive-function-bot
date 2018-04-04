@@ -13,9 +13,9 @@ def set_time_pref(owner, time_pref):
   db.set_feelings_config_time_pref(owner, time_pref)
 
 def prompt_user(owner):
-  options = [["1", "2", "3", "4","5"]]
+  options = ["1", "2", "3", "4","5"]
   keyboard = chat_helper.build_keyboard(options)
-  chat_helper.send_message("How are you feeling?", owner)
+  chat_helper.send_message("How are you feeling?", owner, keyboard)
 
 def initialize_schedule(owner):
   config = db.get_feelings_config(owner)
