@@ -17,10 +17,8 @@ def command_handler(text, chat_id):
     """
     chat_helper.send_message(start_message, chat_id)
   elif text.startswith("/todo"):
-    print "DEBUG: update is a command in the todo function"
     return todo.command_handler(text, chat_id)
   elif text.startswith("/feelingtracker"):
-    print "DEBUG: update is a command in the todo function"
     return ft.command_handler(text, chat_id)
   elif text == "/debug":
     ft.debug(chat_id)
@@ -33,7 +31,7 @@ def listener_handler(listener, text, chat_id):
   elif listener.startswith("feelingtracker"):
     return ft.listener_handler(listener, text, chat_id)
   else:
-    print listener
+    continue
 
 def handle_updates(updates, listener):
   for update in updates["result"]:
