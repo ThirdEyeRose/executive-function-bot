@@ -19,9 +19,10 @@ def prompt_user(owner):
 
 def initialize_schedule(owner):
   config = db.get_feelings_config(owner)
-  # config[0] is frequency
-  # config[1] is time pref
-  schedule.every(1).minutes.do(prompt_user, owner)
+  frequency = {"Daily" : 24, "A few times a day" : 4, "Hourly" : 1 }
+  # config[0][0] is frequency
+  # config[0][1] is time pref
+  schedule.every(frequency[config[0][0]]).hours.do(prompt_user, owner)
 
 def debug(owner):
   initialize_schedule(owner)
