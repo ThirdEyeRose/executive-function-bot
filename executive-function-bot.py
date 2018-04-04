@@ -73,29 +73,35 @@ def command_handler(text, chat_id):
   else:
     send_message("I'm sorry, I don't know that command. Use /help for a list of commands.", chat_id)
 
+def listener_handler(listener, text, chat_id):
+  if listener == "removetodo":
+    todo.remove_item_from_list(text, chat_id)
+    send_message(todo.get_item_list(chat), chat_id)
+  elif listener == "addtodo":
+    todo.add_item_to_list(text, chat)
+    send_message(todo.get_item_list(chat), chat)
+  elif listener == "configfeelingtrackingfrequency":
+    ft.set_frequency(chat, text)
+    options = ["Morning", "Afternoon", "Evening", "Throughout the day"]
+    keyboard = build_keyboard(options)
+    send_message("Do you have a preference of when you want to talk about your feelings?", chat, keyboard)
+    return "configfeelingtrackingtime"
+  elif listener == "configfeelingtrackingtime":
+    ft.set_time_pref(chat, text)
+    send_message("Thanks for letting me know!", chat)
+  else:
+    print listener
+    continue
+
 def handle_updates(updates, listener):
   for update in updates["result"]:
     text = update["message"]["text"]
     chat = update["message"]["chat"]["id"]
-    todoitems = db.get_items(chat)
 
     if text.startswith("/"):
       return command_handler(text, chat)
-    elif text in todoitems and listener == "removetodo":
-      todo.remove_item_from_list(text, chat)
-      send_message(todo.get_item_list(chat), chat)
-    elif listener == "addtodo":
-      todo.add_item_to_list(text, chat)
-      send_message(todo.get_item_list(chat), chat)
-    elif listener == "configfeelingtrackingfrequency":
-      ft.set_frequency(chat, text)
-      options = ["Morning", "Afternoon", "Evening", "Throughout the day"]
-      keyboard = build_keyboard(options)
-      send_message("Do you have a preference of when you want to talk about your feelings?", chat, keyboard)
-      return "configfeelingtrackingtime"
-    elif listener == "configfeelingtrackingtime":
-      ft.set_time_pref(chat, text)
-      send_message("Thanks for letting me know!", chat)
+    elif listener is not None:
+      return listener_handler(listener, text, chat)
     elif text == "end":
       return None
     else:
