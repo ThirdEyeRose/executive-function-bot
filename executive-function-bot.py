@@ -47,36 +47,46 @@ def build_keyboard(items):
   reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
   return json.dumps(reply_markup)
 
+def command_handler(text, chat_id):
+  todoitems = db.get_items(chat_id)
+  if text == "/start":
+    start_message = """Welcome to the Executive Function Bot. I'm here to
+    help you get things done. For now, I operate as a traditional To Do list.
+    Tell me things that you want to do and use /done to mark them complete.
+    """
+    send_message(start_message, chat_id)
+  elif text == "/addtodo":
+    send_message("What do you need to do?", chat_id)
+    return "addtodo"
+  elif text == "/finishtodo":
+    keyboard = build_keyboard(todoitems)
+    send_message("Select an item to mark complete", chat_id, keyboard)
+    return "removetodo"
+  elif text == "/starttrackingfeelings":
+    send_message("Feeling Tracking Enabled", chat_id)
+    options = ["Daily", "A few times a day", "Hourly"]
+    keyboard = build_keyboard(options)
+    send_message("How often would you like to talk about your feelings?", chat_id, keyboard)
+    return "configfeelingtrackingfrequency"
+  elif text == "/debug":
+    ft.debug(chat_id)
+  else:
+    send_message("I'm sorry, I don't know that command. Use /help for a list of commands.", chat_id)
+
 def handle_updates(updates, listener):
   for update in updates["result"]:
     text = update["message"]["text"]
     chat = update["message"]["chat"]["id"]
     todoitems = db.get_items(chat)
-    if text == "/start":
-      start_message = """Welcome to the Executive Function Bot. I'm here to
-      help you get things done. For now, I operate as a traditional To Do list.
-      Tell me things that you want to do and use /done to mark them complete.
-      """
-      send_message(start_message, chat)
-    elif text == "/addtodo":
-      send_message("What do you need to do?", chat)
-      return "addtodo"
-    elif text == "/finishtodo":
-      keyboard = build_keyboard(todoitems)
-      send_message("Select an item to mark complete", chat, keyboard)
-      return "removetodo"
+
+    if text.startswith("/"):
+      return command_handler(text, chat)
     elif text in todoitems and listener == "removetodo":
       todo.remove_item_from_list(text, chat)
       send_message(todo.get_item_list(chat), chat)
     elif listener == "addtodo":
       todo.add_item_to_list(text, chat)
       send_message(todo.get_item_list(chat), chat)
-    elif text == "/starttrackingfeelings":
-      send_message("Feeling Tracking Enabled", chat)
-      options = ["Daily", "A few times a day", "Hourly"]
-      keyboard = build_keyboard(options)
-      send_message("How often would you like to talk about your feelings?", chat, keyboard)
-      return "configfeelingtrackingfrequency"
     elif listener == "configfeelingtrackingfrequency":
       ft.set_frequency(chat, text)
       options = ["Morning", "Afternoon", "Evening", "Throughout the day"]
@@ -86,12 +96,8 @@ def handle_updates(updates, listener):
     elif listener == "configfeelingtrackingtime":
       ft.set_time_pref(chat, text)
       send_message("Thanks for letting me know!", chat)
-    elif text == "/debug":
-      ft.debug(chat)
     elif text == "end":
       return None
-    elif text.startswith("/"):
-      continue
     else:
       continue
 

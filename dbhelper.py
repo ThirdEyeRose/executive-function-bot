@@ -57,6 +57,6 @@ class DBHelper:
     self.conn.commit()
 
   def get_feelings_config(self, owner):
-    stmt = "SELECT frequency FROM feelingsConfig WHERE owner = (?)"
+    stmt = "SELECT frequency, time_pref FROM feelingsConfig WHERE owner = (?)"
     args = (owner, )
-    return [x[0] for x in self.conn.execute(stmt, args)]
+    return [x for x in self.conn.execute(stmt, args)]
