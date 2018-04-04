@@ -30,8 +30,6 @@ def listener_handler(listener, text, chat_id):
     chat_helper.send_message(todo.listener_handler(listener, text, chat_id), chat_id)
   elif listener.startswith("feelingtracker"):
     return ft.listener_handler(listener, text, chat_id)
-  else:
-    continue
 
 def handle_updates(updates, listener):
   for update in updates["result"]:
