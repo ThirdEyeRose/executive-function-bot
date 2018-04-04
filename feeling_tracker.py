@@ -12,10 +12,20 @@ def set_frequency(owner, frequency):
 def set_time_pref(owner, time_pref):
   db.set_feelings_config_time_pref(owner, time_pref)
 
-def debug(owner):
+def prompt_user(owner):
+  options = [["1", "2", "3", "4","5"]]
+  keyboard = chat_helper.build_keyboard(options)
+  chat_helper.send_message("How are you feeling?", owner)
+
+def initialize_schedule(owner):
   config = db.get_feelings_config(owner)
-  for setting in config[0]:
-    print setting
+  # config[0] is frequency
+  # config[1] is time pref
+  schedule.every(1).minutes.do(prompt_user, owner)
+
+def debug(owner):
+  initialize_schedule(owner)
+  print schedule.jobs
 
 def command_handler(text, chat_id):
   if text == "/feelingtrackerstart":
