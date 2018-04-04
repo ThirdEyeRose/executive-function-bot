@@ -29,6 +29,11 @@ def get_last_update_id(updates):
     update_ids.append(int(update["update_id"]))
   return max(update_ids)
 
+def build_keyboard(items):
+  keyboard = [[item] for item in items]
+  reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
+  return json.dumps(reply_markup)
+
 def send_message(text, chat_id, reply_markup=None):
   text = urllib.quote_plus(text)
   url = URL + "sendMessage?text={}&chat_id={}&parse_mode=Markdown".format(text, chat_id)

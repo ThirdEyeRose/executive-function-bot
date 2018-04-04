@@ -9,11 +9,6 @@ import feeling_tracker as ft
 
 db = DBHelper()
 
-def build_keyboard(items):
-  keyboard = [[item] for item in items]
-  reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
-  return json.dumps(reply_markup)
-
 def command_handler(text, chat_id):
   if text == "/start":
     start_message = """Welcome to the Executive Function Bot. I'm here to
@@ -27,7 +22,7 @@ def command_handler(text, chat_id):
   elif text == "/feelingtrackerstart":
     chat_helper.send_message("Feeling Tracking Enabled", chat_id)
     options = ["Daily", "A few times a day", "Hourly"]
-    keyboard = build_keyboard(options)
+    keyboard = chat_helper.build_keyboard(options)
     chat_helper.send_message("How often would you like to talk about your feelings?", chat_id, keyboard)
     return "configfeelingtrackingfrequency"
   elif text == "/debug":
@@ -37,11 +32,11 @@ def command_handler(text, chat_id):
 
 def listener_handler(listener, text, chat_id):
   if listener.startswith("todo"):
-    chat_helper.send_message(todo.listener_handler(text, chat_id), chat_id)
+    chat_helper.send_message(todo.listener_handler(listener, text, chat_id), chat_id)
   elif listener == "configfeelingtrackingfrequency":
     ft.set_frequency(chat_id, text)
     options = ["Morning", "Afternoon", "Evening", "Throughout the day"]
-    keyboard = build_keyboard(options)
+    keyboard = chat_helper.build_keyboard(options)
     chat_helper.send_message("Do you have a preference of when you want to talk about your feelings?", chat_id, keyboard)
     return "configfeelingtrackingtime"
   elif listener == "configfeelingtrackingtime":
