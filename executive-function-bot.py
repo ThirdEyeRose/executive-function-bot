@@ -19,12 +19,9 @@ def command_handler(text, chat_id):
   elif text.startswith("/todo"):
     print "DEBUG: update is a command in the todo function"
     return todo.command_handler(text, chat_id)
-  elif text == "/feelingtrackerstart":
-    chat_helper.send_message("Feeling Tracking Enabled", chat_id)
-    options = ["Daily", "A few times a day", "Hourly"]
-    keyboard = chat_helper.build_keyboard(options)
-    chat_helper.send_message("How often would you like to talk about your feelings?", chat_id, keyboard)
-    return "configfeelingtrackingfrequency"
+  elif text.startswith("/feelingtracker"):
+    print "DEBUG: update is a command in the todo function"
+    return ft.command_handler(text, chat_id)
   elif text == "/debug":
     ft.debug(chat_id)
   else:
