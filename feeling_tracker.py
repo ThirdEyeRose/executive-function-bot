@@ -45,4 +45,5 @@ def listener_handler(listener, text, chat_id):
     return "feelingtrackerconfigtime"
   elif listener == "feelingtrackerconfigtime":
     set_time_pref(chat_id, text)
-    chat_helper.send_message("Thanks for letting me know!", chat_id)
+    initialize_schedule(owner)
+    chat_helper.send_message("Thanks for letting me know! I'll be in touch!", chat_id)
