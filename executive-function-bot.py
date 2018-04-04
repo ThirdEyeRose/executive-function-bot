@@ -78,14 +78,16 @@ def handle_updates(updates, listener):
       send_message("How often would you like to talk about your feelings?", chat, keyboard)
       return "configfeelingtrackingfrequency"
     elif listener == "configfeelingtrackingfrequency":
-      # Record frequency response in database
+      ft.set_frequency(chat, text)
       options = ["Morning", "Afternoon", "Evening", "Throughout the day"]
       keyboard = build_keyboard(options)
       send_message("Do you have a preference of when you want to talk about your feelings?", chat, keyboard)
       return "configfeelingtrackingtime"
     elif listener == "configfeelingtrackingtime":
-      # Record time preference in database
+      ft.set_time_pref(chat, text)
       send_message("Thanks for letting me know!", chat)
+    elif text == "/debug":
+      ft.debug(chat)
     elif text == "end":
       return None
     elif text.startswith("/"):

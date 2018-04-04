@@ -1,5 +1,3 @@
-import json
-
 from dbhelper import DBHelper
 
 db = DBHelper()
