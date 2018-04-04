@@ -39,7 +39,6 @@ def handle_updates(updates, listener):
     chat = update["message"]["chat"]["id"]
 
     if text.startswith("/"):
-      print "DEBUG: update is a command"
       return command_handler(text, chat)
     elif listener is not None:
       return listener_handler(listener, text, chat)
