@@ -29,13 +29,11 @@ def get_last_update_id(updates):
     update_ids.append(int(update["update_id"]))
   return max(update_ids)
 
-def build_keyboard(items):
-  keyboard = [[item] for item in items]
-  reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
-  return json.dumps(reply_markup)
-
-def build_hoz_keyboard(items):
-  keyboard = [[item for item in items]]
+def build_keyboard(items, style="vert"):
+  if style == "vert":
+    keyboard = [[item] for item in items]
+  else:
+    keyboard = [[item for item in items]]
   reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
   return json.dumps(reply_markup)
 

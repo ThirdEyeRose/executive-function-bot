@@ -14,7 +14,7 @@ def set_time_pref(owner, time_pref):
 
 def prompt_user(owner):
   options = ["1", "2", "3", "4","5"]
-  keyboard = chat_helper.build_hoz_keyboard(options)
+  keyboard = chat_helper.build_keyboard(options, "hoz")
   chat_helper.send_message("How are you feeling?", owner, keyboard)
   # Set listener to record the feeling rating
 
