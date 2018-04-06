@@ -34,6 +34,11 @@ def build_keyboard(items):
   reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
   return json.dumps(reply_markup)
 
+def build_hoz_keyboard(items):
+  keyboard = [[item for item in items]]
+  reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
+  return json.dumps(reply_markup)
+
 def send_message(text, chat_id, reply_markup=None):
   text = urllib.quote_plus(text)
   url = URL + "sendMessage?text={}&chat_id={}&parse_mode=Markdown".format(text, chat_id)
